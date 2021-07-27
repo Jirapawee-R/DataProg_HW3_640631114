@@ -61,7 +61,7 @@ player1 = input("What is your name? : ")
 print()
 
 min_taken = 1
-max_taken = 2
+max_taken = random.randint(min_taken+1, stick_amount-1)
 pick = 0
 turn = 0
 
