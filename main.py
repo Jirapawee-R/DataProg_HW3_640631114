@@ -4,13 +4,13 @@ import random
 # Check pick-up condition
 def check_taken(x, take_max, take_min, in_pile):
     if x > take_max:
-        print("Sorry, you cannot take more than 2 sticks in once.")
+        print("Sorry, you cannot take more than " + str(max_taken) + " sticks in once.")
         return False
     elif x > in_pile:
         print("Sorry, you don't have enough stick.")
         return False
     elif x < take_min:
-        print("Sorry, you cannot take less than 1 stick.")
+        print("Sorry, you cannot take less than " + str(min_taken) + " stick.")
         return False
     else:
         return True
@@ -74,9 +74,11 @@ while not is_over(stick_amount):
         print("I," + player + ", takes : ", pick)
         turn = 0
     else:
-        pick = int(input(player1 + ", How many stick(s) you will take? (from 1 to " + str(max_taken) + ") : "))
+        pick = int(input(player1 + ", How many stick(s) you will take? (from " + str(min_taken)
+                         + " to " + str(max_taken) + ") : "))
         while not check_taken(pick, max_taken, min_taken, stick_amount):
-            pick = int(input(player1 + ", How many stick(s) you will take? (from 1 to " + str(max_taken) + ") : "))
+            pick = int(input(player1 + ", How many stick(s) you will take? (from " + str(min_taken)
+                             + " to " + str(max_taken) + ") : "))
         turn = 1
     stick_amount = stick_amount - pick
     print("There are", stick_amount, "stick(s) left in the pile.\n")
