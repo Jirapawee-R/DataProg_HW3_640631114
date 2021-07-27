@@ -1,13 +1,16 @@
+import random
+
+
 # Check pick-up condition
 def check_taken(x, take_max, take_min, in_pile):
     if x > take_max:
-        print("Sorry, you cannot take more than 2 sticks in once.")
+        print("Sorry, you cannot take more than " + str(max_taken) + " sticks in once.")
         return False
     elif x > in_pile:
         print("Sorry, you don't have enough stick.")
         return False
     elif x < take_min:
-        print("Sorry, you cannot take less than 1 stick.")
+        print("Sorry, you cannot take less than " + str(min_taken) + " stick.")
         return False
     else:
         return True
@@ -27,15 +30,16 @@ def whose_turn(x):
 
 # Check bot player condition
 def bot_consider(take_max, take_min, in_pile):
-    if in_pile == take_min:     # if stick = 2, take 1
+    # take min pick-up if there are the minimum pick-up available (no choice : pick then lose)
+    if in_pile == take_min:
         return take_min
-    elif in_pile == take_max:       # if stick = 1, take 1 >> loss with no choice
-        return take_min
+    # if stick left in a pile is not in the set of losing number
+    elif (in_pile+take_max) % (take_max+1) != 0:
+        for i in range(take_min, take_max+1):
+            if ((in_pile-i)+take_max) % (take_max+1) == 0:
+                return i
     else:
-        if in_pile - take_max == take_min:      # if picking up 2 sticks leaves 1 stick, picks 2 stick
-            return take_max
-        else:
-            return take_max
+        return random.randint(take_min, take_max)
 
 
 # Check the winner ( turn=0: player, turn=1:computer)
@@ -49,14 +53,15 @@ def winner(x, bot, who):
         print("I,", bot, ", wins !!!")
 
 
+print("\n---------------------------------\n   WELCOME TO STICK IN A PILE  \n---------------------------------")
 stick_amount = int(input("How many sticks (N) in the pile? : "))
 print("There are", stick_amount, "stick(s) in the pile.")
 player = "smart computer"
 player1 = input("What is your name? : ")
 print()
 
-max_taken = 2
 min_taken = 1
+max_taken = random.randint(min_taken+1, stick_amount-1)
 pick = 0
 turn = 0
 
@@ -69,12 +74,16 @@ while not is_over(stick_amount):
         print("I," + player + ", takes : ", pick)
         turn = 0
     else:
-        pick = int(input(player1 + ", How many stick(s) you will take? (1 or 2) : "))
+        pick = int(input(player1 + ", How many stick(s) you will take? (from " + str(min_taken)
+                         + " to " + str(max_taken) + ") : "))
         while not check_taken(pick, max_taken, min_taken, stick_amount):
-            pick = int(input(player1 + ", How many stick(s) you will take? (1 or 2) : "))
+            pick = int(input(player1 + ", How many stick(s) you will take? (from " + str(min_taken)
+                             + " to " + str(max_taken) + ") : "))
         turn = 1
     stick_amount = stick_amount - pick
     print("There are", stick_amount, "stick(s) left in the pile.\n")
 
 print("Over! There is no stick left in the pile.")
 winner(turn, player, player1)
+
+print("\n------------------\n   GOOD BYE  " + player1 + "\n------------------")
